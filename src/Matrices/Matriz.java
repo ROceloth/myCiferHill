@@ -97,6 +97,7 @@ public class Matriz {
     /* Metodos de modificacion por coordenada*/
     
     /**
+     * Modificacion a una posicion de la matriz
      * Valor a la cordenada (i,j)
      * @param i numero de fila
      * @param j numero de columna
@@ -208,7 +209,68 @@ public class Matriz {
     }
     
     
+    /**
+     * Manejemos a la fila como un vector
+     * @param i la fila a recuperar
+     * @return una arr de doubles que representa la fila i
+     * no es referencia a la matriz
+     */
+    public double [] getFilaVector(int i){
+        double [] fila = new double[this.m];
+        
+        for (int j = 0; j < m; j++) {
+            fila[j] = this.getValCoord(i, j); //lol calculated
+        }
+        
+        return fila;
+    }
+          
+    /**
+     * Metodo aun mas auxiliar para las matrices para multiplicar vectores
+     * por un escalar distinto de 0
+     * @param fila
+     * @param k
+     * @return modificara el arreglo de doubles por su producto con k
+     * @throws java.lang.Exception No multiplicar por 0
+     */
+    public static double [] multiVectK(double [] fila, double k) 
+            throws Exception{
+        
+        if (k == 0) {
+            throw new Exception("Multiplicar por 0 un vector no lleva "
+                    + "a ningun lado");
+        }
+        
+        for (int i = 0; i < fila.length; i++) {
+            fila[i] *= k;
+        }
+        
+        return fila;
+    }
+            
+    /**
+     * Un metodo tambien axiliar que una fila de this 
+     * matriz se sumara con un vector
+     * @param vect arr de double a sumar con la fila
+     * @param fila la fila que se sumara a vect
+     * @throws Exception se espera que la longuitud del
+     * vector sea igual que m (osea la longuitud de las filas)
+     */
+    public void sumaVectorM(double[] vect, int fila) throws Exception{
+        if (vect.length != this.m) {
+            throw new Exception("Suma invalida de longitud de vectores");
+        }
+        
+        for (int i = 0; i < m; i++) {
+            this.setValCoord(fila, i, 
+                    this.getValCoord(fila, i) + vect[i]);
+        }
+    }
     
+    /*
+    Yeah, no necesitare de momento un clon porque manipulare las GJ1
+    */
+            
     @Override
     public String toString() {
         
