@@ -9,7 +9,7 @@ public class TestMatriz {
     public static void main(String [] args) throws Exception{
         System.out.println("Nota recordad que empieza la numeracion en 0");
         
-        
+        /* Correcto
         Matriz A = new Matriz();
         System.out.println("Matriz identidad 3x3");
         System.out.println(A);
@@ -22,6 +22,10 @@ public class TestMatriz {
         A.setSumF(0, 1);
         System.out.println(A);
          
+        System.out.println("Producto por ella misma");
+        Matriz A2 = A.mutliplexM(A);
+        System.out.println(A2);
+        /*
         
         /* Correcto
         System.out.println("Set Val a (1,1)");
@@ -29,10 +33,18 @@ public class TestMatriz {
         System.out.println(A);
         */
         
+        double m[][] = {{2, 1, -3},
+        {1, 1, 2},
+        {-1, -2, 0}
+        }; //test
         
-        System.out.println("Producto por ella misma");
-        Matriz A2 = A.mutliplexM(A);
-        System.out.println(A2);
+        Matriz M = new Matriz(m);
+        System.out.println("La matriz M");
+        System.out.println(M);
+        
+        System.out.println("La matriz M expandida");
+        Matriz JL1 = M.expandMatIden();
+        System.out.println(JL1);
         
         
     }

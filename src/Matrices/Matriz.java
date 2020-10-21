@@ -6,9 +6,9 @@ package Matrices;
  * 
  * Determinate
  * Escalonada
- * Producto
- * Despliegue
- * operaciones elementales
+ * Producto - check
+ * Despliegue - check
+ * operaciones elementales -check
  * metodo de Guss Jordan para inversa
  * 
  * Intercambio de renglones?
@@ -26,6 +26,8 @@ public class Matriz {
     
     public Matriz(double[][] matrix){
         this.matrix = matrix;
+        this.n = matrix.length; //abst filas
+        this.m = matrix[0].length; //abst columnas
         
     }
     
@@ -141,7 +143,7 @@ public class Matriz {
     
     /**
      * Multiplicacion de matrices 
-     * @param A this Matriz se multiplicara por la matriz A
+     * @param this Matriz se multiplicara por la matriz A
      * @return this * A = Matriz
      * @throws Exception this.m != A.n matiz no defina para multiplicar
      */
@@ -169,6 +171,40 @@ public class Matriz {
         }
         
         return C;
+    }
+    
+    
+    /**
+     * Expandamos la matriz a una de su identidad 
+     * metodo auxiliar 
+     * esperara una matriz cuadrada y creara su expansion
+     * para la G-J
+     * this matriz se expande
+     * @return JL n x 2n
+     */
+    public Matriz expandMatIden(){
+        int n = this.getN();
+        int m = 2 * n;
+        
+        Matriz JL = new Matriz(n,m,0);
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                //verificado indices
+                if (j >= n) { //copiar identidad
+                    if ((i+n) == j) { //la diagonal de segunda parte
+                        JL.setValCoord(i, j, 1);
+                    }else{
+                        JL.setValCoord(i, j, 0);
+                    }
+                }else{ //copiar original
+                    JL.setValCoord(i, j,
+                            this.getValCoord(i, j));//valor j<n ajustados
+                }
+            }
+        }
+        
+        return JL;
     }
     
     
