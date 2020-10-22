@@ -283,41 +283,45 @@ public class Matriz {
      * @throws Exception la de multiplicar vectores por 0
      */
     public void escalonar() throws Exception{
-        //empecemos escalonando la primera columna
+        System.out.println(this);
         for (int i = 0; i < n - 1; i++) {
-
+            System.out.println("i: " + i);
+            
             for (int j = i; j < n - 1; j++) { //pero barbaro con fullmetal reference
                 //Los debugers sabrosongos
-                /*System.out.println("j: " + j);*/
+                System.out.println("j: " + j);
                 
                 //Ri primer valor de la matriz objetivo
-                //Rs valor que apunta
+                //Rs valor que apunta, donde empieza
                 //x = Ri/Rs
-                double x = this.getValCoord((j + 1), i) 
-                        / this.getValCoord(i, i);
-                /*
-                System.out.println("Ri: " + this.getValCoord(i, (j + 1)));
-                System.out.println("Rs: " + this.getValCoord(i, i));
-                System.out.println("x:" + x + "\n");
-                */
-                //Ri <- Ri + (-1)Rs
-                double[] Rs = this.getFilaVector(i);
-                /*
-                System.out.println("Rs =:");
-                TestMatriz.printArr(Rs);
-                System.out.println();
-                */
-                Matriz.multiVectK(Rs, (-1) * x);
-                /*
-                System.out.println("Rs*(-1)x");
-                TestMatriz.printArr(Rs);
-                System.out.println();
-                */
-                this.sumaVectorM(Rs, j + 1);
-                /*
-                System.out.println(this);
-                System.out.println();
-                */
+                double ri = this.getValCoord((j + 1), i);
+                double rs = this.getValCoord(i, i);
+                if (ri != 0 && rs != 0) { //su objetivo no este escalonado
+
+                    double x = ri / rs;
+
+                    System.out.println("Ri: " + ri);
+                    System.out.println("Rs: " + rs);
+                    System.out.println("x:" + x + "\n");
+
+                    //Ri <- Ri + (-1)Rs
+                    double[] Rs = this.getFilaVector(i);
+
+                    System.out.println("Rs =:");
+                    TestMatriz.printArr(Rs);
+                    System.out.println();
+
+                    Matriz.multiVectK(Rs, (-1) * x);
+
+                    System.out.println("Rs*(-1)x");
+                    TestMatriz.printArr(Rs);
+                    System.out.println();
+
+                    this.sumaVectorM(Rs, j + 1);
+
+                    System.out.println(this);
+                    System.out.println();
+                }
             }
         }
     }//end escalonar

@@ -33,11 +33,12 @@ public class TestMatriz {
         System.out.println(A);
         */
         
+        /*
         double m[][] = {
             {2, 1, -3},
             {1, 1, 2},
             {-1, -2, 0}
-        }; //test
+        }; //test1 listo
         
         Matriz M = new Matriz(m);
         System.out.println("La matriz M");
@@ -46,7 +47,9 @@ public class TestMatriz {
         System.out.println("Determinante de M:");
         double det = M.determinate();
         System.out.println(det);
+        */
         
+        /* yeah ignorando los ya objetivos ya escalonado
         double m2 [][] = {
             {1,-2,-1,3},
             {-1,3,-2,-2},
@@ -59,10 +62,30 @@ public class TestMatriz {
         System.out.println("La matriz M2");
         System.out.println(M2);
         
-        /*
+        
         System.out.println("Determinante de M2:");
         double det2 = M2.determinate();
-        System.out.println(det2); */
+        System.out.println(det2); 
+        */
+        
+        
+        double m3 [][] = {
+            {1,-2,-1,3},
+            {1,-2,2,3},
+            {2,0,1,1},
+            {-1,3,-2,-2}
+        };
+        
+        
+        Matriz M3 = new Matriz(m3);
+        System.out.println("La matriz M3");
+        System.out.println(M3);
+        
+        
+        System.out.println("Determinante de M3:");
+        double det3 = M3.determinate();
+        System.out.println(det3); 
+        
         
         /*
         System.out.println("Escalonado la matriz M");
