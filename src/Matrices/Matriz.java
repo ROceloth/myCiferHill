@@ -270,7 +270,96 @@ public class Matriz {
     /*
     Yeah, no necesitare de momento un clon porque manipulare las GJ1
     */
+    
+    /**
+     * Escalonara una matriz
+     * Sera la primera parta del Gauss Jordan, pero aqui
+     * aun no se convertiran a 1 la digonal principal, primero
+     * se busca el determinante
+     * 
+     * Mas que nada se espera a las matices aumentadas
+     * 
+     * Escalona la matriz, modifica sus valores
+     * @throws Exception la de multiplicar vectores por 0
+     */
+    public void escalonar() throws Exception{
+        //empecemos escalonando la primera columna
+        for (int i = 0; i < n - 1; i++) {
+
+            for (int j = i; j < n - 1; j++) { //pero barbaro con fullmetal reference
+                //Los debugers sabrosongos
+                /*System.out.println("j: " + j);*/
+                
+                //Ri primer valor de la matriz objetivo
+                //Rs valor que apunta
+                //x = Ri/Rs
+                double x = this.getValCoord((j + 1), i) 
+                        / this.getValCoord(i, i);
+                /*
+                System.out.println("Ri: " + this.getValCoord(i, (j + 1)));
+                System.out.println("Rs: " + this.getValCoord(i, i));
+                System.out.println("x:" + x + "\n");
+                */
+                //Ri <- Ri + (-1)Rs
+                double[] Rs = this.getFilaVector(i);
+                /*
+                System.out.println("Rs =:");
+                TestMatriz.printArr(Rs);
+                System.out.println();
+                */
+                Matriz.multiVectK(Rs, (-1) * x);
+                /*
+                System.out.println("Rs*(-1)x");
+                TestMatriz.printArr(Rs);
+                System.out.println();
+                */
+                this.sumaVectorM(Rs, j + 1);
+                /*
+                System.out.println(this);
+                System.out.println();
+                */
+            }
+        }
+    }//end escalonar
+    
+    
+    /**
+     * Devuelve el derminate de la matriz
+     * @return double que es el determinante
+     */
+    public double determinate() throws Exception{
+        //matriz expandida y escalonada
+        Matriz expEscal = detGLpt1();
+        
+        int esN = expEscal.getN();
+        int esM = expEscal.getM();
+        
+        double det = 1;
+        for (int i = 0; i < esN; i++) {
+            for (int j = 0; j < esM; j++) {
+                if (i == j) {
+                    det *= expEscal.getValCoord(i, j);
+                }
+            }
+        }
+        
+        return det;
+    }
             
+    /**
+     * Expande la matriz con la identidad
+     * y la escalona sin reducir su diagonal a 1
+     * @return Matriz expandida y escalonada sin su diagonal original
+     * principal reducida a 1's
+     */
+    private Matriz detGLpt1() throws Exception{
+        Matriz JL1 = this.expandMatIden();
+        JL1.escalonar();
+        
+        return JL1;
+    }
+    
+    
     @Override
     public String toString() {
         
@@ -292,6 +381,7 @@ public class Matriz {
         
         return sb.toString();
     }
+
     
     
 }
