@@ -169,10 +169,17 @@ public class Matriz {
         for (int i = 0; i < newN; i++) {
             for (int j = 0; j < newM; j++) {
                 int val = 0;
+                System.out.print("val (" + i + "," + j + "): ");
                 for (int k = 0; k < newM; k++) {
+                    System.out.print(this.getValCoord(i, k) + "x"
+                            + A.getValCoord(k, j));
+                    System.out.print(" + ");
                     val += this.getValCoord(i, k)
                             * A.getValCoord(k, j);
+                    
                 }
+                System.out.print("=" + val);
+                System.out.println();
                 //System.out.printf("i: %d, j: %d, val: %d\n",i,j,val);                
                 C.setValCoord(i, j, val);
             }
@@ -333,13 +340,13 @@ public class Matriz {
      */
     public void escalonar() throws Exception{
         //Los debugers sabrosongos
-        System.out.println(this);
+        //System.out.println(this);
         for (int i = 0; i < n - 1; i++) {
-            System.out.println("i: " + i);
+            //System.out.println("i: " + i);
             
             for (int j = i; j < n - 1; j++) { //pero barbaro con fullmetal reference
                 
-                System.out.println("j: " + j);
+                //System.out.println("j: " + j);
                 
                 //Ri primer valor de la matriz objetivo
                 //Rs valor que apunta, donde empieza
@@ -380,34 +387,34 @@ public class Matriz {
 
                     double x = ri / rs;
                     
-                    
+                    /*
                     System.out.println("Ri: " + ri);
                     System.out.println("Rs: " + rs);
                     System.out.println("x:" + x + "\n");
-                    
+                    */
                     //Ri <- Ri + (-1)Rs
                     double[] Rs = this.getFilaVector(i);
 
-                    
+                    /*
                     System.out.println("Rs =:");
                     TestMatriz.printArr(Rs);
                     System.out.println();
-                    
+                    */
                     
                     Matriz.multiVectK(Rs, (-1) * x);
 
-                    
+                    /*
                     System.out.println("Rs*(-1)x");
                     TestMatriz.printArr(Rs);
                     System.out.println();
-                    
+                    */
                     
                     this.sumaVectorM(Rs, j + 1);
                     
-                    
+                    /*
                     System.out.println(this);
                     System.out.println();
-                    
+                    */
                 }
             }
         }
@@ -417,9 +424,28 @@ public class Matriz {
     /**
      * Devuelve el derminate de la matriz
      * @return double que es el determinante
-     * @throws java.lang.Exception
+     * @throws Exception del producto por 0
+     * se sus otras llamadas
      */
     public double determinate() throws Exception{
+        Object [] L = determinateList();
+        double det = (Double)L[0]; //desmpaquetado
+        return det;
+    }
+    
+    /**
+     * Devuelve el derminate de la matriz
+     * @return Un arreglo que contendra en la primera
+     * posion en Double que es el determinate y en la segunda 
+     * la matriz resultado de detGLpt1
+     * L[0] -- Determinate
+     * L[1] -- Matriz expEscal = detGLpt1();
+     * Recuerda castearlo a su valores originales
+     * que esto es por polimorfismo devolver dos cosas
+     * en un metodo juntandolo en una estructura
+     * @throws java.lang.Exception
+     */
+    private Object[] determinateList() throws Exception{
         //matriz expandida y escalonada
         Matriz expEscal = detGLpt1();
         
@@ -439,10 +465,14 @@ public class Matriz {
         Aunque son operaciones con Reales, teoricamente
         Aqui se hacen sobre punto flotante
         */
-        //Primer redondeo
-        det = Math.rint(det*1000)/1000;
+        //Primer redondeo por rint a 4 decimales
+        det = Math.rint(det*10000)/10000;
         
-        return det;
+        Object [] L = new Object[2];
+        L[0] = det;
+        L[1] = expEscal;
+        
+        return L;
     }
             
     /**
@@ -520,6 +550,169 @@ public class Matriz {
         return index;
     }
 
+    /**
+     * El calculo del determinate se hace impicitamnte aqui
+     * tambien, si este es distinto de 0 la matriz tiene inversa
+     * @return
+     * @throws Exception Matriz singular
+     */
+    
+    public Matriz inversa() throws Exception{
+        Object [] L = determinateList();
+        double det = (Double)L[0];
+        
+        if (det == 0) {
+            throw new Exception("Esta matriz es singular "
+                    + "no tiene inversa");
+        }
+        
+        Matriz pt1 = (Matriz)L[1];
+        
+        //continuemos con la pt2
+        //escalonado y reducimiento hacia arriba
+        pt1.escalonarArribaRedux(); //Esta es la parte2
+        Matriz invert = recuperarExpnd(pt1);
+        
+        //invert.cleanM_Rint(); no conviene
+        
+        return invert;
+        
+    }
+    
+    /**
+     * Utilizara el redoendeo por
+     * rint para "limpiar" la matriz
+     * det = Math.rint(det*10000)/10000;
+     */
+    private void cleanM_Rint(){
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                double val = this.getValCoord(i, j);
+                double nuevoVal = Math.rint(val*10000)/10000;
+                this.setValCoord(i, j, nuevoVal);
+            }
+        }
+    }
+    
+    /**
+     * desde la matriz que su determinate no es 0 resultado
+     * de detGLpt1, es una matriz expandida,
+     * desde su coordenaa (n,m/2), osea la (n,n) como referencia 
+     * se reducira la diagonal a 1 y se escalonara hacia arriba
+     * 
+     * Del lado desde (i,j) con i = n+1, n+2, ... , m
+     * se encontrara la matriz inversa
+     */
+    private void escalonarArribaRedux() throws Exception{
+        //System.out.println("En el metodo escalonarArribaRedux");
+        
+        /*
+        System.out.println(this);
+        System.out.println();
+        */
+        //Reduce el primer renglon
+        double redux1 = 1.0 / this.getValCoord(0, 0);
+        this.setMultEskF(0, redux1);
+        
+        /*
+        System.out.println(this);
+        System.out.println();
+        */
+        
+        //Los debugers sabrosongos
+        for (int i = n-1; i > 0; i--) { //reduce el resto
+            System.out.println("i: " + i);
+            
+            for (int j = i; j > 0; j--) { 
+                
+                //System.out.println("j: " + j);
+                
+                //Ri primer valor de la matriz objetivo
+                //Rs valor que apunta, donde empieza
+                //x = Ri/Rs
+                
+                double ri = this.getValCoord((j - 1), i);              
+                double rsOld = this.getValCoord(i, i);
+                
+                //primera reduccion hacia arriba
+                double redux = 1.0/rsOld;
+                this.setMultEskF(i, redux);
+                
+                double rs = this.getValCoord(i, i); //que sera 1
+                
+                /*
+                System.out.println("Reduccion de renglon");
+                System.out.println(this);
+                System.out.println();
+                */
+                
+                //no hara intercambios de renglones
+                
+                if (ri != 0 ) { 
+
+                    double x = ri / rs; //propiedades heredadas
+                    
+                    /*                    
+                    System.out.println("Ri: " + ri);
+                    System.out.println("Rs: " + rs);
+                    System.out.println("x:" + x + "\n");
+                    */
+                    
+                    //Ri <- Ri + (-1)Rs
+                    double[] Rs = this.getFilaVector(i);
+
+                    /*
+                    System.out.println("Rs =:");
+                    TestMatriz.printArr(Rs);
+                    System.out.println();
+                    */
+                    
+                    Matriz.multiVectK(Rs, (-1) * x);
+
+                    /*
+                    System.out.println("Rs*(-1)x");
+                    TestMatriz.printArr(Rs);
+                    System.out.println();
+                    */
+                    
+                    this.sumaVectorM(Rs, j - 1);
+                    
+                    /*
+                    System.out.println(this);
+                    System.out.println();
+                    */
+                }
+            }
+        }
+        
+    }
+    
+    /**
+     * Recuperar la matriz que esta en el lado de la expandida
+     * @param pt1 Se espera una matriz expandida i.e n x 2n
+     * @return Matiz n x n donde de la matriz pt1 sus colunas seran
+     * desde n+1,n+2,...,m
+     */
+    private Matriz recuperarExpnd(Matriz pt1){
+        int newN = pt1.getN();
+        int newM = pt1.getM();
+        
+        
+        Matriz re = new Matriz(newN,newN,0);
+        
+        
+        for (int i = 0, r = 0;  i < newN; i++, r++) {
+            
+            for (int j = newN, s = 0; j < newM; j++, s++) {
+                
+                
+                re.setValCoord(r, s,
+                        pt1.getValCoord(i, j));
+            }
+        }
+        
+        return re;
+    }
     
     
 }
