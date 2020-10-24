@@ -358,7 +358,9 @@ public class Matriz {
                         this.intercambio(i, rns);
                         rs = this.getValCoord(i, i); //nuevo valor de rs
                     }                    
-                }
+                } //si ocurrio esto hay que hacer un registro de 
+                //cuantas veces lo hizo i.e para adecuarla al 
+                //determinante cuantos intercambios hubo
                 
                 //rapido sabe sabe, si rs se quedo en 0, entonce
                 //hubo dependencia lineal
@@ -396,6 +398,7 @@ public class Matriz {
     /**
      * Devuelve el derminate de la matriz
      * @return double que es el determinante
+     * @throws java.lang.Exception
      */
     public double determinate() throws Exception{
         //matriz expandida y escalonada

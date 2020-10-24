@@ -8,50 +8,13 @@ package Matrices;
 public class TestMatriz {
     public static void main(String [] args) throws Exception{
         System.out.println("Nota recordad que empieza la numeracion en 0");
-        
-        /* Correcto
-        Matriz A = new Matriz();
-        System.out.println("Matriz identidad 3x3");
-        System.out.println(A);
-        
-        System.out.println("Producto escalar 8*F2");
-        A.setMultEskF(1, 8);
-        System.out.println(A);
-        
-        System.out.println("Suma de filas F1 <- F1+F2");
-        A.setSumF(0, 1);
-        System.out.println(A);
          
-        System.out.println("Producto por ella misma");
-        Matriz A2 = A.mutliplexM(A);
-        System.out.println(A2);
-        /*
-        
-        /* Correcto
-        System.out.println("Set Val a (1,1)");
-        A.setValCoord(1, 1, 100);
-        System.out.println(A);
-        */
-        
-        /*
         double m[][] = {
             {2, 1, -3},
             {1, 1, 2},
             {-1, -2, 0}
-        }; //test1 listo
+        }; 
         
-        Matriz M = new Matriz(m);
-        System.out.println("La matriz M");
-        System.out.println(M);
-        
-        System.out.println("Determinante de M:");
-        double det = M.determinate();
-        System.out.println(det);
-        */
-        
-        //yeah ignorando los ya objetivos ya escalonado
-        
-        /*
         double m2 [][] = {
             {1,-2,-1,3},
             {-1,3,-2,-2},
@@ -59,16 +22,6 @@ public class TestMatriz {
             {1,-2,2,3}
         };
          
-        Matriz M2 = new Matriz(m2);
-        System.out.println("La matriz M2");
-        System.out.println(M2);
-        
-        
-        System.out.println("Determinante de M2:");
-        double det2 = M2.determinate();
-        System.out.println(det2); 
-        */
-        
         
         double m3 [][] = {
             {1,-2,-1,3},
@@ -77,57 +30,32 @@ public class TestMatriz {
             {-1,3,-2,-2}
         };
         
-        Matriz M3 = new Matriz(m3);
-        System.out.println("La matriz M3");
-        System.out.println(M3);
+         
+        double[][] m4 = {
+            {1, 0, 1},
+            {1, 0, 1},
+            {0, 0, 0}
+        }; //claramente no invertible
         
-        //intercambio, exit-o 
-        /*
-        M3.intercambio(1, 1); //intercambiar por el mismo renglon no hace nada
-        System.out.println("Intercambio de R1 <-> R3");
-        System.out.println(M3);
-         */
+        testu(m4);
         
-        System.out.println("Determinante de M3:");
-        double det3 = M3.determinate();
-        System.out.println(det3); 
-        
-        
-        /*
-        System.out.println("Escalonado la matriz M");
-        M.escalonar();
+    }
+    
+    /**
+     * Cleans
+     * Automaticemos los test
+     * @param m
+     */
+    public static void testu(double [][] m) throws Exception{
+        Matriz M = new Matriz(m);
+        System.out.println("La matriz M");
         System.out.println(M);
-        */
         
-        /* 1
-        System.out.println("La matriz M expandida");
-        Matriz JL1 = M.expandMatIden();
-        System.out.println(JL1);
-        */
+        System.out.println("Determinante de M:");
+        double det = M.determinate();
+        System.out.println("es igual a:");
+        System.out.println(det); 
         
-        /*Correcto
-        System.out.println("Provemos obtener vectores, fila 1");
-        double [] fila1 = JL1.getFilaVector(0);
-        System.out.println("Fila 0 (empezando en 0)");
-        printArr(fila1);
-        
-        System.out.println("Multiplicando por escalar -1/2");
-        Matriz.multiVectK(fila1, (-1.0/2.0));
-        printArr(fila1);
-        
-        System.out.println("Sumando R1 a vect: R1 <- R1 + vect");
-        JL1.sumaVectorM(fila1, 1);
-        System.out.println(JL1);
-        
-        System.out.println("Mientras tanto la matriz original");
-        System.out.println(M);
-        */
-        
-        /*1
-        System.out.println("Escalonando a JL1");
-        JL1.escalonar();
-        System.out.println(JL1);
-        */
     }
     
     /*Rapido ver vector*/
