@@ -190,6 +190,7 @@ public class Matriz {
      * @return JL n x 2n
      */
     public Matriz expandMatIden(){
+        //Es redundante pero es para ser mas claro
         int n = this.getN();
         int m = 2 * n;
         
@@ -308,9 +309,7 @@ public class Matriz {
                     ri[l]);
         }
         
-    }
-    
-    
+    }//fin del intercambio equivalente
     
     
     /*
@@ -345,10 +344,25 @@ public class Matriz {
                 double rs = this.getValCoord(i, i);
                 /*rs, no puede continuar con 0, en caso de no encontrar
                 intercambio de rs <-> rsn distinto para 0
-                esto es independencias lineales su det ya es 0
+                esto es dependencias lineales, su det ya es 0
                 */
                 //rs != 0
-                if (ri != 0) { //su objetivo no este escalonado
+                
+                //intentara hacer el cambio
+                if (rs == 0) { //estamos en la iteracion i
+                    //buscar e intercambiar por un nuevo rs
+                    //en las filas i+1
+                    //nueva rs
+                    int rns = this.buscarRenglonMin(i,i);
+                    if (rns != 0) {
+                        this.intercambio(i, rns);
+                        rs = this.getValCoord(i, i); //nuevo valor de rs
+                    }                    
+                }
+                
+                //rapido sabe sabe, si rs se quedo en 0, entonce
+                //hubo dependencia lineal
+                if (ri != 0 && rs != 0) { //su objetivo no este escalonado
 
                     double x = ri / rs;
 
@@ -436,6 +450,45 @@ public class Matriz {
         }
         
         return sb.toString();
+    }
+
+    /**
+     * En otras palabras buscara en la columna j,
+     * desde (l+1) hasta n su elemento mas pequeño
+     * distinto de 0 en caso de no encontrarlo regresara el mismo 
+     * indice que lo invoco 
+     * 
+     * Este metodo solo se llama para hacer un intercambio para la escalonada
+     * cuando la coordenada (l,j) = 0 
+     * 
+     * Intercambio de l <-> (el indice que encuentre) buscando por la columna
+     * 
+     * @param l  fila de referencia
+     * @param j  columna de referencia
+     * (l,j) valor que es 0 (otra referencia)
+     * @return index k de la fila donde se encontro en la columan el valor mas
+     * pequeño distinto de 0
+     */
+    private int buscarRenglonMin(int l, int j) {
+        
+        //min == this.getValCoord(l, j) ==  0.0
+        double min = Double.MAX_VALUE; //buscamos para bajar
+        int index = l+1; //a la fila
+        for (int i = l+1; i < n; i++) {
+            
+            double x = this.getValCoord(i, j);
+            if (x < min && x != 0) {
+                min = x;
+                index = i;
+            }
+        }
+        
+        if (min == Double.MAX_VALUE) { //nunca cambio al final
+            index = l; //esto hace un intercambio con sigo mismo
+            //no se puede escalonar mas en esa columna
+        }
+        
+        return index;
     }
 
     

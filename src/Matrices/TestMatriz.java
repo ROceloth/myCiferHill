@@ -82,15 +82,15 @@ public class TestMatriz {
         System.out.println(M3);
         
         //intercambio, exit-o 
-        M3.intercambio(1, 3);
+        /*
+        M3.intercambio(1, 1); //intercambiar por el mismo renglon no hace nada
         System.out.println("Intercambio de R1 <-> R3");
         System.out.println(M3);
-       
-        /*
+         */
+        
         System.out.println("Determinante de M3:");
         double det3 = M3.determinate();
         System.out.println(det3); 
-        */
         
         
         /*
