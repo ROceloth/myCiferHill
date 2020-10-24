@@ -5,13 +5,14 @@ package Matrices;
  * operaciones de transformaciones lineales
  * 
  * Determinate
- * Escalonada
+ * Escalonada - check
  * Producto - check
  * Despliegue - check
  * operaciones elementales -check
  * metodo de Guss Jordan para inversa
  * 
- * Intercambio de renglones?
+ * Intercambio de renglones? YES
+ * -adecuado a det y GJ
  * 
  * @author ROcelote
  * @version 1.0
@@ -108,6 +109,11 @@ public class Matriz {
     }
     
     
+    /*
+    Operaciones elementales de matrices
+    */
+    
+    
     /**
      * Operacion elemental de producto por escalar en fila
      * @param i fila i
@@ -144,7 +150,7 @@ public class Matriz {
     
     /**
      * Multiplicacion de matrices 
-     * @param this Matriz se multiplicara por la matriz A
+     * @param A Matriz se multiplicara por la matriz A
      * @return this * A = Matriz
      * @throws Exception this.m != A.n matiz no defina para multiplicar
      */
@@ -267,6 +273,46 @@ public class Matriz {
         }
     }
     
+    
+    /**
+     * Intercambio de renglones en la matriz
+     * Modifica this Matriz Ri <-> Rj, el renglon Ri sera
+     * intercambiado por el renglon Rj
+     * (Ri, Rj. Se nota el cambio de notacion despues de una buena leida
+     * de algebra lineal)
+     * @param Ri  Renglo/fila i-esima
+     * @param Rj  j-esima fila
+     * @throws Exception que se cumpla que 0 < Ri,Rj < m
+     */
+    public void intercambio(int Ri, int Rj) throws Exception{
+        
+        if (Ri < 0 || Ri >= m || Rj < 0 || Rj >= m ) {
+            throw new Exception("Renglones fuera de rango");
+        }
+        double [] ri = this.getFilaVector(Ri);
+        
+        /*
+        Ya en otra tarea me dijeron que no enrede tanto los indices
+        ves tu que razon mas cuando son indices de matrices en la
+        literatura
+        */
+        for (int l = 0; l < m; l++) {
+            //copiar en el renglon i la fila j
+            this.setValCoord(Ri, l, 
+                    this.getValCoord(Rj, l));
+        }
+        
+        //en el renglo j copiar la ri
+        for (int l = 0; l < m; l++) {
+            this.setValCoord(Rj, l, 
+                    ri[l]);
+        }
+        
+    }
+    
+    
+    
+    
     /*
     Yeah, no necesitare de momento un clon porque manipulare las GJ1
     */
@@ -283,12 +329,13 @@ public class Matriz {
      * @throws Exception la de multiplicar vectores por 0
      */
     public void escalonar() throws Exception{
+        //Los debugers sabrosongos
         System.out.println(this);
         for (int i = 0; i < n - 1; i++) {
             System.out.println("i: " + i);
             
             for (int j = i; j < n - 1; j++) { //pero barbaro con fullmetal reference
-                //Los debugers sabrosongos
+                
                 System.out.println("j: " + j);
                 
                 //Ri primer valor de la matriz objetivo
@@ -296,7 +343,12 @@ public class Matriz {
                 //x = Ri/Rs
                 double ri = this.getValCoord((j + 1), i);
                 double rs = this.getValCoord(i, i);
-                if (ri != 0 && rs != 0) { //su objetivo no este escalonado
+                /*rs, no puede continuar con 0, en caso de no encontrar
+                intercambio de rs <-> rsn distinto para 0
+                esto es independencias lineales su det ya es 0
+                */
+                //rs != 0
+                if (ri != 0) { //su objetivo no este escalonado
 
                     double x = ri / rs;
 

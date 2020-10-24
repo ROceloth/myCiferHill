@@ -49,15 +49,16 @@ public class TestMatriz {
         System.out.println(det);
         */
         
-        /* yeah ignorando los ya objetivos ya escalonado
+        //yeah ignorando los ya objetivos ya escalonado
+        
+        /*
         double m2 [][] = {
             {1,-2,-1,3},
             {-1,3,-2,-2},
             {2,0,1,1},
             {1,-2,2,3}
         };
-        
-        
+         
         Matriz M2 = new Matriz(m2);
         System.out.println("La matriz M2");
         System.out.println(M2);
@@ -76,15 +77,20 @@ public class TestMatriz {
             {-1,3,-2,-2}
         };
         
-        
         Matriz M3 = new Matriz(m3);
         System.out.println("La matriz M3");
         System.out.println(M3);
         
-        
+        //intercambio, exit-o 
+        M3.intercambio(1, 3);
+        System.out.println("Intercambio de R1 <-> R3");
+        System.out.println(M3);
+       
+        /*
         System.out.println("Determinante de M3:");
         double det3 = M3.determinate();
         System.out.println(det3); 
+        */
         
         
         /*
