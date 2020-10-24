@@ -37,7 +37,15 @@ public class TestMatriz {
             {0, 0, 0}
         }; //claramente no invertible
         
-        testu(m4);
+        double [][] m5 = {
+            {1,2,3,5},
+            {4,1,2,3},
+            {2,3,1,4},
+            {2,2,3,4}                                    
+        };
+        
+        
+        testu(m5);
         
     }
     

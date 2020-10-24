@@ -116,6 +116,7 @@ public class Matriz {
     
     /**
      * Operacion elemental de producto por escalar en fila
+     * Modifica la matriz
      * @param i fila i
      * @param k valor para multiplicar distinto de 0
      * @throws Exception simple de momento pura comprovacion
@@ -322,6 +323,9 @@ public class Matriz {
      * aun no se convertiran a 1 la digonal principal, primero
      * se busca el determinante
      * 
+     * Cuando se produce un inercambio de renglones
+     * el escalonomiento cambia el signo a un renglon
+     * 
      * Mas que nada se espera a las matices aumentadas
      * 
      * Escalona la matriz, modifica sus valores
@@ -356,6 +360,14 @@ public class Matriz {
                     int rns = this.buscarRenglonMin(i,i);
                     if (rns != 0) {
                         this.intercambio(i, rns);
+                        
+                        /*
+                        Las operaciones elementales no afectaran 
+                        al escalonado y busqueda por la matriz
+                        pero un intercambio de renglones cambia el signo
+                        al determinante
+                        */
+                        this.setMultEskF(i, (-1));                        
                         rs = this.getValCoord(i, i); //nuevo valor de rs
                     }                    
                 } //si ocurrio esto hay que hacer un registro de 
@@ -367,28 +379,35 @@ public class Matriz {
                 if (ri != 0 && rs != 0) { //su objetivo no este escalonado
 
                     double x = ri / rs;
-
+                    
+                    
                     System.out.println("Ri: " + ri);
                     System.out.println("Rs: " + rs);
                     System.out.println("x:" + x + "\n");
-
+                    
                     //Ri <- Ri + (-1)Rs
                     double[] Rs = this.getFilaVector(i);
 
+                    
                     System.out.println("Rs =:");
                     TestMatriz.printArr(Rs);
                     System.out.println();
-
+                    
+                    
                     Matriz.multiVectK(Rs, (-1) * x);
 
+                    
                     System.out.println("Rs*(-1)x");
                     TestMatriz.printArr(Rs);
                     System.out.println();
-
+                    
+                    
                     this.sumaVectorM(Rs, j + 1);
-
+                    
+                    
                     System.out.println(this);
                     System.out.println();
+                    
                 }
             }
         }
@@ -415,6 +434,13 @@ public class Matriz {
                 }
             }
         }
+        
+        /*
+        Aunque son operaciones con Reales, teoricamente
+        Aqui se hacen sobre punto flotante
+        */
+        //Primer redondeo
+        det = Math.rint(det*1000)/1000;
         
         return det;
     }
