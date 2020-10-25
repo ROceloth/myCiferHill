@@ -4,17 +4,19 @@ package Matrices;
  * Clase de matrices para las
  * operaciones de transformaciones lineales
  * 
- * Determinate
+ * Determinate - check
  * Escalonada - check
  * Producto - check
  * Despliegue - check
  * operaciones elementales -check
- * metodo de Guss Jordan para inversa
+ * metodo de Guss Jordan para inversa -check
  * 
  * Intercambio de renglones? YES
- * -adecuado a det y GJ
+ * -adecuado a det y GJ -check
  * 
- * @author ROcelote
+ * Operacione elemental Producto Escalar matriz
+ * 
+ * @author ROcelote (Mi perfil de GitHub)
  * @version 1.0
  * @since 20/10/2020
  */
@@ -33,6 +35,7 @@ public class Matriz {
     }
     
     /**
+     * Constructor
      * Matriz identidad de n x m
      * @param n filas 
      * @param m columans
@@ -730,5 +733,27 @@ public class Matriz {
         return re;
     }
     
+    
+    /**
+     * Producto por un escalara a los coeficientes de la matriz
+     * Operacion con la matriz
+     * @param k escalara a multiplicar los ceficientes de this
+     * @return Matriz kM, donde cada una de sus coordenadas
+     * es k*(i,j) 
+     * ADVERTENCIA, Aqui si esta permitido multiplicar por 0
+     */
+    public Matriz productoEscalarMatriz(double k){
+        //mismos ordenes
+        Matriz kM = new Matriz(n,m); //uso relativo de identidad
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                double valK = this.getValCoord(i, j) * k;
+                kM.setValCoord(i, j, valK);
+            }
+        }
+        
+        return kM;
+    }
     
 }

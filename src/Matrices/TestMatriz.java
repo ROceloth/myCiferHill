@@ -45,62 +45,19 @@ public class TestMatriz {
             {-1, -2, 0}
         }; 
         
-        testu(m);
+        //testu(m);
         
-        /* Ejercicio teorico
-        double a[][] = {
-            {1,2,-1},
-            {1,1,1},
-            {1,-1,0}
-        };
+        Matriz M = new Matriz(m);
+        System.out.println("La matriz M");
+        System.out.println(M);
+        System.out.println("La matriz M2 = M * 15");
+        Matriz M2 = M.productoEscalarMatriz(15);
+        System.out.println(M2);
+        System.out.println("Mientras tanto M");
+        System.out.println(M);
         
-        double e[][] ={
-            {0,0,1},
-            {0,1,0},
-            {1,0,0}
-        };
         
-        Matriz A = new Matriz(a);
-        Matriz E = new Matriz(e);
         
-        System.out.println(A);
-        System.out.println("---------");
-        System.out.println(E);
-        System.out.println("---------");
-        System.out.println(E.productoM(A));
-        */ 
-        
-        //(0,0)
-        //2.0x0.44444444444444453 + 1.0x-0.22222222222222232 
-        //+ -3.0x-0.1111111111111111  == 0?
-        
-        /*
-        double a = (2.0)*(0.44444444444444453);
-        double b = (1.0)*(-0.22222222222222232);
-        double c = (-3.0)*(-0.1111111111111111);
-        */
-        
-        //(2,2)
-        //-1.0x0.5555555555555555 + -2.0x-0.7777777777777777 
-        //+ 0.0x0.1111111111111111
-        //double a = (-1.0)*(0.5555555555555555);
-        //double b = (-2.0)*(-0.7777777777777777);
-        //double c = (0.0)*(0.1111111111111111);        
-        //testu2(a,b,c);
-        
-        //2.0x0.6666666666666665 + 1.0x-0.33333333333333304 
-        //+ -3.0x0.3333333333333333
-        //double a = (2.0)*(0.6666666666666665);
-        //double b = (1.0)*(-0.33333333333333304);
-        //double c = (-3.0)*(0.3333333333333333);
-        //testu2(a,b,c);
-        
-        //1.0x0.6666666666666665 + 1.0x-0.33333333333333304 
-        //+ 2.0x0.3333333333333333
-        //double a = (1.0)*(0.6666666666666665);
-        //double b = (1.0)*(-0.33333333333333304);
-        //double c = (2.0)*(0.3333333333333333);
-        //testu2(a,b,c);
     }
     
     /**
@@ -144,6 +101,7 @@ public class TestMatriz {
     
     /*
     Aritmetica de punto flotante pls
+    cleans
     */
     public static void testu2(double a, double b, double c){
         System.out.println("a :" + a);
