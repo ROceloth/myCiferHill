@@ -148,14 +148,26 @@ public class Matriz {
         }
     }
     
+    /**
+     * Metodo más publico para el producto por la derecha de matrices
+     * Por defecto no limpia/redondea con Math.rint los coeficientes
+     * de la matriz, para hacerlo se utiliza la sobrecarga del metodo
+     * @param A Matriz a multiplicar por la derecha
+     * @return this * A
+     * @throws Exception Dimensiones no compatibles para el producto
+     */
+    public Matriz productoM(Matriz A) throws Exception{
+        return productoM(A,false);
+    }
     
     /**
      * Multiplicacion de matrices 
      * @param A Matriz se multiplicara por la matriz A
+     * @param cleans  Boolean si es true limpiara el resultado con Math.rint
      * @return this * A = Matriz
      * @throws Exception this.m != A.n matiz no defina para multiplicar
      */
-    public Matriz mutliplexM(Matriz A) throws Exception{
+    public Matriz productoM(Matriz A, boolean cleans) throws Exception{
         if (this.m != A.getN()) {
             throw new Exception("Dimension de colunmas no igual a filas para "
                     + "multiplicar");
@@ -168,21 +180,27 @@ public class Matriz {
         
         for (int i = 0; i < newN; i++) {
             for (int j = 0; j < newM; j++) {
-                int val = 0;
-                System.out.print("val (" + i + "," + j + "): ");
+                //Importante el tipo para la aritmetica con punto flotante
+                double val = 0.0; 
+                //System.out.print("val (" + i + "," + j + "): ");
                 for (int k = 0; k < newM; k++) {
-                    System.out.print(this.getValCoord(i, k) + "x"
-                            + A.getValCoord(k, j));
-                    System.out.print(" + ");
+                    //System.out.print(this.getValCoord(i, k) + "x"
+                            //+ A.getValCoord(k, j));
+                    //System.out.print(" + ");
                     val += this.getValCoord(i, k)
                             * A.getValCoord(k, j);
                     
                 }
-                System.out.print("=" + val);
-                System.out.println();
-                //System.out.printf("i: %d, j: %d, val: %d\n",i,j,val);                
+                //System.out.print("=" + val);
+                
                 C.setValCoord(i, j, val);
+                //System.out.print(" ("+i+","+j+") = " + C.getValCoord(i, j));
+                //System.out.println();
             }
+        }
+        
+        if (cleans) {
+            C.cleanM_Rint();
         }
         
         return C;
@@ -452,7 +470,7 @@ public class Matriz {
         int esN = expEscal.getN();
         int esM = expEscal.getM();
         
-        double det = 1;
+        double det = 1.0;
         for (int i = 0; i < esN; i++) {
             for (int j = 0; j < esM; j++) {
                 if (i == j) {
@@ -573,22 +591,20 @@ public class Matriz {
         pt1.escalonarArribaRedux(); //Esta es la parte2
         Matriz invert = recuperarExpnd(pt1);
         
-        //invert.cleanM_Rint(); no conviene
+        //invert.cleanM_Rint(); Aqui nunca es buena idea, afectaria operaciones
         
         return invert;
         
     }
     
     /**
-     * Utilizara el redoendeo por
-     * rint para "limpiar" la matriz
-     * det = Math.rint(det*10000)/10000;
+     * Redondeo por Math.rint
      */
     private void cleanM_Rint(){
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 double val = this.getValCoord(i, j);
-                double nuevoVal = Math.rint(val*10000)/10000;
+                double nuevoVal = Math.rint(val);
                 this.setValCoord(i, j, nuevoVal);
             }
         }
@@ -621,7 +637,7 @@ public class Matriz {
         
         //Los debugers sabrosongos
         for (int i = n-1; i > 0; i--) { //reduce el resto
-            System.out.println("i: " + i);
+            //System.out.println("i: " + i);
             
             for (int j = i; j > 0; j--) { 
                 
