@@ -1,5 +1,7 @@
 package Matrices;
 
+import ToolsTeoNum.RTNum;
+
 /**
  * Clase de matrices para las
  * operaciones de transformaciones lineales
@@ -15,6 +17,8 @@ package Matrices;
  * -adecuado a det y GJ -check
  * 
  * Operacione elemental Producto Escalar matriz
+ * 
+ * Operacion exotica reducir modulo matriz
  * 
  * @author ROcelote (Mi perfil de GitHub)
  * @version 1.0
@@ -754,6 +758,39 @@ public class Matriz {
         }
         
         return kM;
+    }
+    
+    /**
+     * Operacion exotica sobre this
+     * 
+     * Para cada coeficiente a_i,j de la matriz
+     * se le aplicara el (a_i,j) % m
+     * @param m modulo a reducir
+     * Modifica la matriz
+     * 
+     * @throws m == 0 modulo no definido
+     */
+    public void reduccionModulo(double m) throws Exception{
+        if (m == 0) {
+            throw new Exception("Modulo 0, no definido");
+        }
+        
+        /*
+        Aunque nunca tendra sentido un modulo con punto decimal
+        en los campos de Zm
+        */
+        int m1 = (int)Math.round(m); 
+                
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < this.m; j++) {
+                double a1 = this.getValCoord(i, j);
+                int a = (int)Math.round(a1);
+                
+                double newVal = RTNum.modExceso(a, m1);
+                this.setValCoord(i, j, newVal);
+                //modulo de doubles si permitido en java
+            }
+        }
     }
     
 }

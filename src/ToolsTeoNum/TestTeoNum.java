@@ -6,7 +6,7 @@ package ToolsTeoNum;
  */
 public class TestTeoNum {
     
-    public static void main(String [] mames){
+    public static void main(String [] mames) throws Exception{
         int a = 17;
         int b = 23;
         int b2 = 17*2; //no necesariamente simetric
@@ -19,6 +19,7 @@ public class TestTeoNum {
         
         testuInvr(4,6);
        
+        testModExceso(100,26);
     }
     
     public static void testuEuclides(int a, int b) {
@@ -42,5 +43,29 @@ public class TestTeoNum {
         }catch(Exception e){
             System.out.println(e);
         }
+    }
+    
+    public static void testModExceso(int a, int m) throws Exception{
+        System.out.println("Provando el metodo de remainder por exceso");
+        System.out.println("Regla 1");
+        System.out.print("El resultado de "+a+" %% " +m+ " = ");
+        int r = RTNum.modExceso(a, m);
+        System.out.println(r);
+        
+        System.out.println("Regla 2");
+        System.out.print("El resultado de "+((-1)*a)+" %% " +m+ " = ");
+        r = RTNum.modExceso(a*(-1), m);
+        System.out.println(r);
+        
+        System.out.println("Regla 3");
+        System.out.print("El resultado de "+a+" %% " +(m*(-1))+ " = ");
+        r = RTNum.modExceso(a, m*(-1));
+        System.out.println(r);
+        
+        System.out.println("Regla 4");
+        System.out.print("El resultado de "+(a*(-1))+" %% " +(m*(-1))+ " = ");
+        r = RTNum.modExceso((a*(-1)), m*(-1));
+        System.out.println(r);
+        
     }
 }

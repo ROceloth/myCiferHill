@@ -47,6 +47,7 @@ public class TestMatriz {
         
         //testu(m);
         
+        /*
         Matriz M = new Matriz(m);
         System.out.println("La matriz M");
         System.out.println(M);
@@ -55,7 +56,17 @@ public class TestMatriz {
         System.out.println(M2);
         System.out.println("Mientras tanto M");
         System.out.println(M);
+        */
+        double a[][] = {
+            {161,-92},
+            {-115,207}
+        };
         
+        Matriz A = new Matriz(a);
+        System.out.println(A);
+        System.out.println("Aplicando modulo 26");
+        A.reduccionModulo(26);
+        System.out.println(A);
         
         
     }

@@ -14,7 +14,7 @@ package ToolsTeoNum;
 public class RTNum {
     
     /**
-     * Alguna vez lo hice en pytho y ahora lo
+     * Alguna vez lo hice en Python y ahora lo
      * traslado aqui
      * 
      * El algoritmo de mi pana Euclides
@@ -128,5 +128,75 @@ public class RTNum {
         return x; //nunca deberia ser 0 asi que wacha el pedo
         
     }
+    
+    
+    /**
+     * Implementaremos el calculo del remainder por exceso para java
+     * adecuado los coeficientes double ya que java implementa la
+     * operacion a%m cuando a < 0 de manera |a|%|m| y regreasa el signo 
+     * de la division de a/m.
+     * 
+     * La implenetacion por exceso tiene la pecualirdad de que cuando 
+     * a<0 a%m = r, el REMAINDER r>0, el cual es el buscado para
+     * adecuarlo a los indices que supondran los datagramas
+     * 
+     * Referencias: 25/10/2020
+     * https://cutt.ly/fgmsSF9
+     * https://cutt.ly/CgmsJXO
+     * 
+     * Mames mira lo de acortar urls, que conveniente
+     * 
+     * Resumen de las reglas para la operacion de modulo
+     * en las matrices para el cifrado de hill, las reglas 
+     * para aplicarlas en reducionModulo de las matices
+     * 
+     * 1) Si a >= 0 y m > 0 ----- a%m  el modo normal e.g 100 % 26 = 22
+     * 2) Si a <  0 y m > 0 ------- Calculo por exceso con resultado positivo
+     * e.g -100 % 26 = 4
+     * 3) Si a >= 0 y m < 0 -------- Calculo por exceso con el resultado negativo
+     * e.g 100 % -26 = -4
+     * 4) Si a < 0 y m < 0 -------- a%m el modo normal con resultado negativo
+     * e.g -100%-26 = -22
+     * 
+     * y donde m nunca puede ser 0
+     * 
+     * modExceso solo es valido cuando a < 0
+     * @param a  paramtero del modulo a < 0 (hasta el cansansio lo repeti)
+     * @param m  modulo que igualmente no esta definido para m=0
+     * @return Resultado deacuerdo a las reglas 1), 2), 3) y 4)
+     * @throws Exception modulo 0
+     */
+    public static int modExceso(int a, int m) throws Exception{
+        if (m == 0) {
+            throw new Exception("Modulo 0 no definido (no mames)");
+        }
+        
+        if (a >=0 && m > 0) {
+            return a%m; //regla 1)
+        }else if(a >= 0 && m < 0){ //regla 3)
+            int m1 = Math.abs(m);
+            int q = a/m1;
+            int e = q+1; //el exceso
+            int r = (m1*e)-a; //recurda que a < 0
+            return r*(-1);
+        // a < 0
+        }else if(m > 0){ //regla 2)
+            int a1 = Math.abs(a);
+            int q = a1/m;
+            int e = q+1; //el exceso
+            int r = (m*e)+a;
+            return r;
+        // a< 0 && m < 0
+        }else{ //regla 4)
+            return a%m;
+        }   
+        
+    }
+    
+    /*
+    Los metedos en esta clase son puramente auxiliares, se notan
+    muy compactos pero tienen kilo y medio de documentacion, 
+    porque tienen un resplado teorico choncho
+    */
     
 }
