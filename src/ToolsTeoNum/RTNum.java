@@ -177,7 +177,7 @@ public class RTNum {
             int m1 = Math.abs(m);
             int q = a/m1;
             int e = q+1; //el exceso
-            int r = (m1*e)-a; //recurda que a < 0
+            int r = (m1*e)-a; 
             return r*(-1);
         // a < 0
         }else if(m > 0){ //regla 2)

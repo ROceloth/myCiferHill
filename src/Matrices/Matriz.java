@@ -181,8 +181,8 @@ public class Matriz {
         }
         
         
-        int newN = this.m;
-        int newM = A.getN();
+        int newN = this.n;
+        int newM = A.getM();
         Matriz C = new Matriz(newN, newM, 0);
         
         for (int i = 0; i < newN; i++) {
@@ -190,10 +190,12 @@ public class Matriz {
                 //Importante el tipo para la aritmetica con punto flotante
                 double val = 0.0; 
                 //System.out.print("val (" + i + "," + j + "): ");
-                for (int k = 0; k < newM; k++) {
-                    //System.out.print(this.getValCoord(i, k) + "x"
-                            //+ A.getValCoord(k, j));
-                    //System.out.print(" + ");
+                for (int k = 0; k < newN; k++) {
+                    /*
+                    System.out.print(this.getValCoord(i, k) + "x"
+                            + A.getValCoord(k, j));
+                    System.out.print(" + ");*/
+                    
                     val += this.getValCoord(i, k)
                             * A.getValCoord(k, j);
                     
@@ -201,8 +203,9 @@ public class Matriz {
                 //System.out.print("=" + val);
                 
                 C.setValCoord(i, j, val);
-                //System.out.print(" ("+i+","+j+") = " + C.getValCoord(i, j));
-                //System.out.println();
+                /*
+                System.out.print(" ("+i+","+j+") = " + C.getValCoord(i, j));
+                System.out.println();*/
             }
         }
         
@@ -762,12 +765,11 @@ public class Matriz {
     
     /**
      * Operacion exotica sobre this
-     * 
+     * Modifica la matriz
      * Para cada coeficiente a_i,j de la matriz
      * se le aplicara el (a_i,j) % m
-     * @param m modulo a reducir
-     * Modifica la matriz
      * 
+     * @param m modulo a reducir por exceso
      * @throws m == 0 modulo no definido
      */
     public void reduccionModulo(double m) throws Exception{
