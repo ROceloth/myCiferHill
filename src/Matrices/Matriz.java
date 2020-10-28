@@ -589,7 +589,7 @@ public class Matriz {
         Object [] L = determinateList();
         double det = (Double)L[0];
         
-        if (det == 0) {
+        if (det == 0) { //El metodo ya es robusto por su manera
             throw new Exception("Esta matriz es singular "
                     + "no tiene inversa");
         }

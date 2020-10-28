@@ -22,6 +22,11 @@ public class CifradoHill {
     //Alfabeto con ñ -> mod 27 pues
     public static final String  ALFABETO 
             = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    
+    /*
+    public static final String  ALFABETO 
+            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    */
     public static final int N = ALFABETO.length();
     //Areglo por char -> letras
     public static final char [] indexABC;
@@ -58,7 +63,8 @@ public class CifradoHill {
         }
         
         //raiz exacta
-        double n = Math.sqrt(u_Clave.length());
+        double n1 = Math.sqrt(u_Clave.length());
+        int n = (int)Math.round(n1); //solo hacer 1 casteo
         //Respiracion de CC, 8° posutura myEstiloTemplate
         
         Matriz A = toMatrizClave(u_Clave,n);
@@ -103,17 +109,53 @@ public class CifradoHill {
         return str2;
     }
     
+    
+    /**
+     * Metodo que regresa el indice de donde se
+     * encuentra el char en el areglo indexABC
+     * @param l un charcter a buscar en indexABC
+     * @return indice de la posicion en indexABC, -1 si no se encuentra
+     */
+    private int findIndexABC(char l){
+        //int i = -1;
+        for (int i = 0; i < N; i++) {
+            Character x = indexABC[i];
+            if (x.equals(l)) {
+                return i;
+            }
+        }
+        return -1; //no se encuentra tal char en el alfabeto
+    }
  
     //Metodos inicializadores de matriz
     /**
      * Inicilizador de matriz de nxn
      * @param u_str Cadena compactada en mayusculas
      * @param n dimension de la matriz, espera ser int
-     * @return Matriz representante de nxn de acuerdo con
+     * @return Matriz representante de nxn de acuerdo con indexABC
+     * @throws Simbolo no perteneciente al alfabeto
      * indexABC
      */
-    private Matriz toMatrizClave(String u_str, double n){
-        
+    private Matriz toMatrizClave(String u_str, int n) throws Exception{
+        Matriz A = new Matriz(n, n);
+
+        int k = 0;
+
+        for (int i = 0; i < n; i++) { //dividido por renglones            
+            for (int j = 0; j < n; j++) {
+                char letra = u_str.charAt(k++); //incrementos por los 2 ciclos
+                int coord = findIndexABC(letra);
+
+                if (coord == -1) {
+                    throw new Exception("El simbolo " + letra + "no se encuentra "
+                            + "definido en el alfabeto");
+                }
+                A.setValCoord(i, j, coord);
+
+            }
+        }
+
+        return A;
     }
     
     /**
@@ -122,19 +164,66 @@ public class CifradoHill {
      * @param n dimansion de la matriz, espera ser int
      * @return Matriz representante de nx1 de acuerdo con
      * indexABC
+     * @throws Exception Simbolo no perteneciente al alfabeto
+     * indexABC
      */
-    private Matriz toMatrizData(String u_str, double n){
-        
+    private Matriz toMatrizData(String u_str, int n) throws Exception{
+        Matriz P = new Matriz(n,1,0);
+        int k = 0;
+        for (int i = 0; i < n; i++) {
+            char letra = u_str.charAt(k++); //incrementos por los 2 ciclos
+                int coord = findIndexABC(letra);
+
+                if (coord == -1) {
+                    throw new Exception("El simbolo " + letra + "no se encuentra "
+                            + "definido en el alfabeto");
+                }
+            P.setValCoord(i, 0, coord);
+        }
+        return P;
     }
     
     /**
+     * Logica del cifrado de Hill para encriptar 
+     * vista desde las matrices nuemricas
      * 
-     * @param A
-     * @param P
+     * precondiciones las matrices estan listas para multiplicarse
+     * @param A Matriz para incriptar tiene que ser invertible modulo N
+     * @param P Matriz para cifrar
      * @return 
      */
-    private Matriz encriptaMHill(Matriz A, Matriz P){
+    private Matriz encriptaMHill(Matriz A, Matriz P) throws Exception{
+        if (!isHillKriptable(A)) {
+            throw new Exception("La clave no es apta para cifrar");
+        }
         
+        Matriz S = A.productoM(P);//producto
+        S.reduccionModulo(N);
+        
+        return S;
+    }
+    
+    
+    /**
+     * Para poder realizar el decifrado (desEncriptado)
+     * y por consiguiente permitir el Encriptado
+     * 
+     * La matriz A debe de tener inversa y inversa modulo N
+     * @param A Matriz a averiguar la inversa
+     * @return True si A tiene inversa y 
+     * det(A) %% N = a
+     * a tenga inverso multiplicativo en Z_N
+     */
+    private boolean isHillKriptable(Matriz A) throws Exception{
+        double det_A = A.determinate(); //Que sea 0 es que no tiene inversa
+        //Que el metodo de invesa() de las matrices ya lo detecta
+        //Pero hay una propiedad mas fuerte
+        int detA = (int)Math.round(det_A);
+        int r = ToolsTeoNum.RTNum.modExceso(detA, N);
+        
+        //El resumen de toda la teoria para las matrices inversas modulares
+        return ToolsTeoNum.RTNum.EuclidesAlg(r, N) == 1;
+        //Que exista el inverso multiplicativo
     }
     
     /**
@@ -146,6 +235,15 @@ public class CifradoHill {
      * @return NOTA esta cadena es compacta sin espacios y en mayusculas
      */
     private String recuperaInfMatriz(Matriz S){
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < S.getN(); i++) {
+            for (int j = 0; j < S.getM(); j++) {
+                double val = S.getValCoord(i, j);
+                int index = (int)Math.round(val);
+                sb.append(indexABC[index]);
+            }
+        }
         
+        return sb.toString();
     }
 }

@@ -127,6 +127,9 @@ public class TestMatriz {
             System.out.println("La matriz anterior S es un DIagrama cifrado "
                     + "recuerda este dato");
 
+            
+            
+            
             System.out.println("Desicrado baby");
             System.out.println("Busqueda de la Matriz inversa modulo 26");
 
