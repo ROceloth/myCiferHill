@@ -8,7 +8,7 @@ public class TestCifradoHill {
     public static void main(String [] args){
         CifradoHill ch = new CifradoHill(); //ALV
         String clave = "jefh";
-        String msg = "co";
+        String msg = "con diez canones";
         
         try{
             System.out.println("Considere el alfabeto español con la Ñ "

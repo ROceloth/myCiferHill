@@ -20,13 +20,13 @@ import Matrices.Matriz;
 public class CifradoHill {
     
     //Alfabeto con ñ -> mod 27 pues
-    public static final String  ALFABETO 
-            = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    //public static final String  ALFABETO 
+      //      = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
     
-    /*
+    
     public static final String  ALFABETO 
             = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    */
+    
     public static final int N = ALFABETO.length();
     //Areglo por char -> letras
     public static final char [] indexABC;
@@ -68,11 +68,13 @@ public class CifradoHill {
         //Respiracion de CC, 8° posutura myEstiloTemplate
         
         Matriz A = toMatrizClave(u_Clave,n);
-        Matriz P = toMatrizData(u_Msg,n);
         
-        Matriz S = encriptaMHill(A,P);
+        Matriz [] Pi = toMatricesData(u_Msg,n); //nombre mas descriptivo
         
-        String s = recuperaInfMatriz(S);
+        
+        Matriz [] Si = encriptaMHill(A,Pi);
+        
+        String s = recuperaInfMatriz(Si);
         
         return s;
     }
@@ -159,7 +161,7 @@ public class CifradoHill {
     }
     
     /**
-     * Inicializador de matriz de nx1
+     * Inicializador de Una matriz de nx1
      * @param u_str Cadena compactada en mayusculas
      * @param n dimansion de la matriz, espera ser int
      * @return Matriz representante de nx1 de acuerdo con
@@ -184,13 +186,40 @@ public class CifradoHill {
     }
     
     /**
+     * Metodo que devuelve un arreglo de matrices
+     * que representan los n-gramas en texto plano
+     * @param u_msg cadena procesada, sin espacios y en mayusculas
+     * @param n intero aceptado multiplo de la dimension de orden de la
+     * matriz de encriptado
+     * @return Por cada separacion de n en n de u_msg es una matriz 
+     * representada deacuerdo a indexABC
+     * @throws Exception Simbolo no perteneciente al alfabeto
+     * indexABC
+     */
+    private Matriz [] toMatricesData(String u_msg, int n) throws Exception{
+        int k = u_msg.length() / n; //numero de n-gramas
+        
+        Matriz Pi [] = new Matriz[k];
+        
+        int x = 0; //estilo explicito
+        for (int i = 0; i < u_msg.length(); i += n) {
+            String aux = u_msg.substring(i, i+n);
+            Matriz p = toMatrizData(aux,n);
+            Pi[x++]=p;
+        }
+        return Pi;
+    }
+    
+    /**
      * Logica del cifrado de Hill para encriptar 
      * vista desde las matrices nuemricas
      * 
      * precondiciones las matrices estan listas para multiplicarse
      * @param A Matriz para incriptar tiene que ser invertible modulo N
      * @param P Matriz para cifrar
-     * @return 
+     * @return Una matriz encriptada, un n-grama cifrado
+     * @throws Exception la matriz A no tiene inversa modulo N, no se deberia
+     * de encriptar con esta matriz
      */
     private Matriz encriptaMHill(Matriz A, Matriz P) throws Exception{
         if (!isHillKriptable(A)) {
@@ -203,6 +232,26 @@ public class CifradoHill {
         return S;
     }
     
+    //Overcharzu pawar
+    
+    /**
+     * 
+     * @param A La matriz A para encriptar
+     * @param Pi arreglo de n-gramas, matrices a encriptar
+     * @return Si Arreglo de matrices encriptadas
+     * @throws Exception Matriz A producto no permitido bajo la logica del
+     * cifrado de Hill
+     */
+    private Matriz [] encriptaMHill(Matriz A, Matriz [] Pi) throws Exception{
+        int k = Pi.length;
+        Matriz [] Si = new Matriz [k];
+        
+        for (int i = 0; i < k; i++) {
+            Matriz s = encriptaMHill(A, Pi[i]);
+            Si[i] = s;
+        }
+        return Si;
+    }
     
     /**
      * Para poder realizar el decifrado (desEncriptado)
@@ -226,6 +275,9 @@ public class CifradoHill {
         //Que exista el inverso multiplicativo
     }
     
+    
+    //tecnica para hacerlo para uno y despues para varios
+    
     /**
      * De los valores de la matriz se hace la
      * corespondencia de acuerdo a indexABC
@@ -244,6 +296,22 @@ public class CifradoHill {
             }
         }
         
+        return sb.toString();
+    }
+    
+    /**
+     * Metodo para recuperar la informacion de un
+     * arreglo de matrices segun indexABC
+     * @param Si arreglo de matrices
+     * @return String cadena en representacion de las matrices
+     */
+    private String recuperaInfMatriz(Matriz [] Si){
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < Si.length; i++) {
+            Matriz tmp = Si[i];
+            String mi = recuperaInfMatriz(tmp);
+            sb.append(mi);
+        }
         return sb.toString();
     }
 }
