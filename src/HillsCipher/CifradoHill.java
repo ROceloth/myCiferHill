@@ -20,12 +20,12 @@ import Matrices.Matriz;
 public class CifradoHill {
     
     //Alfabeto con ñ -> mod 27 pues
-    //public static final String  ALFABETO 
-      //      = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-    
-    
     public static final String  ALFABETO 
-            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    //Estrategia de comportamiento?
+    /*
+    public static final String  ALFABETO 
+            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";*/
     
     public static final int N = ALFABETO.length();
     //Areglo por char -> letras
@@ -71,7 +71,6 @@ public class CifradoHill {
         
         Matriz [] Pi = toMatricesData(u_Msg,n); //nombre mas descriptivo
         
-        
         Matriz [] Si = encriptaMHill(A,Pi);
         
         String s = recuperaInfMatriz(Si);
@@ -91,6 +90,9 @@ public class CifradoHill {
      * exacta n y u_Msg.lenght() es multiplo de n
      */
     public boolean isLenghtMatch(String u_Clave, String u_Msg){
+        if (u_Clave.length() == 0 || u_Msg.length() == 0) {
+            return false;
+        }
         double n = Math.sqrt( u_Clave.length() );
         int l = u_Msg.length();        
         //la primera busca que n sea raiz exacta
@@ -217,7 +219,8 @@ public class CifradoHill {
      * precondiciones las matrices estan listas para multiplicarse
      * @param A Matriz para incriptar tiene que ser invertible modulo N
      * @param P Matriz para cifrar
-     * @return Una matriz encriptada, un n-grama cifrado
+     * @return Una matriz encriptada, un n-grama cifrado, i.e S = A x P
+     * multiplicacion de matrices
      * @throws Exception la matriz A no tiene inversa modulo N, no se deberia
      * de encriptar con esta matriz
      */
@@ -314,4 +317,61 @@ public class CifradoHill {
         }
         return sb.toString();
     }
+    
+    /**
+     * Metodo para desencriptar con la logica de Hill
+     * @param clave String que tambien fue la clave que se uso
+     * para encriptar generalmente, debe de representar una matriz con 
+     * iniversa modular
+     * @param criptograma String cadena cifrada, Tanto la clave como el 
+     * criptograma se haran operaciones para tratarlas con matrices
+     * @return String mensaje recuperado
+     * @throws Exception longuitudes de valores que no se pueden operar
+     */
+    public String desEncriptar(String clave, String criptograma) 
+            throws Exception{
+        String u_Clave = toUpperCompact(clave);
+        String u_crip = toUpperCompact(criptograma);
+        
+        if (!isLenghtMatch(u_Clave,u_crip)) {
+            throw new Exception ("Longuitudes de valores invalidos");
+        }//valor de n aceptado
+        
+        //Respiracion de CC, 8° posutura myEstiloTemplate
+        double n1 = Math.sqrt(u_Clave.length());
+        int n = (int)Math.round(n1); 
+        
+        //Valores a matrices
+        Matriz A = toMatrizClave(u_Clave,n);
+        Matriz [] Ci = toMatricesData(u_crip,n);//Datagramas Matriz en arreglo
+        
+        //Busqueda de la matriz inversa modulo N
+        double detA = A.determinate();
+        Matriz A1 = A.inversa();
+        
+        /* Se cumple que
+        A^-1 = 1/detA(adj(A^t))
+        con lo que
+        detA*r1(A^-1)(mod N) es la matriz inversa modulo N donde
+        r1 es el inverso multiplicativo de detA %% N
+        (%% Modulo por exceso N, los otros metodos ya se encargan de 
+        definir si todo esto es posible)
+        */
+        int detAaux = (int) Math.round(detA);
+        int r = ToolsTeoNum.RTNum.modExceso(detAaux, N);
+        int r1 = ToolsTeoNum.RTNum.inversoMultiplicativoMod(r, N);
+        
+        Matriz A3 = A1.productoEscalarMatriz(detA*r1); //De un solo golpe
+        A3.reduccionModulo(N); //Matriz inversa modulo N
+        
+        //Empieza el decifrado
+        
+        //Misma secuencia, diferentes paramentros
+        Matriz [] Mi = encriptaMHill(A3,Ci);//reutilizacion de codigo pawa
+        
+        String msg = recuperaInfMatriz(Mi);
+        
+        return msg;//ALV
+    }
+    
 }
