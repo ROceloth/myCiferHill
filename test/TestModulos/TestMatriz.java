@@ -1,5 +1,7 @@
 
-package Matrices;
+package TestModulos;
+
+import Matrices.Matriz;
 
 /**
  * Test
@@ -11,6 +13,7 @@ public class TestMatriz {
           
         System.out.println("Compovacion de ejemplo de la clase");
         //Comprovacion de operaciones
+        /*
         double a [][] = {
             {9,4},
             {5,7}
@@ -43,8 +46,37 @@ public class TestMatriz {
             {19}
         };
         
+        */
+        double tm [][] = {
+            {0},
+            {22}
+        }; //prueva de criptoanalisis, mensaje
+        
+        double ts [][] = {
+            {5,2},
+            {7,3}
+        };//Matriz cifrado 1
+        
+        double s1 [][] ={
+            {2},
+            {20}
+        };
+        
+        double sk [][] = {
+            {2},
+            {20}
+        };
+        
+        double a [][] = {
+            {7,2},
+            {2,3}
+        };
+        
+        
         //finalTestu(a,msg3); //ejemplo profe
-        finalTestu(a2,s2); //ejemplo wiki
+        //finalTestu(a2,s2); //ejemplo wiki
+        //finalTestu(ts,tm); //Prueva analisis 1
+        finalTestu(a,sk);
     }
     
     /**

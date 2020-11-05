@@ -1,4 +1,5 @@
-package ToolsTeoNum;
+package TestModulos;
+import ToolsTeoNum.RTNum;
 
 /**
  * Testeomos mis resultados de la teoria de num
@@ -7,6 +8,7 @@ package ToolsTeoNum;
 public class TestTeoNum {
     
     public static void main(String [] mames) throws Exception{
+        /*
         int a = 17;
         int b = 23;
         int b2 = 17*2; //no necesariamente simetric
@@ -20,6 +22,10 @@ public class TestTeoNum {
         testuInvr(4,6);
        
         testModExceso(100,26);
+        */
+        
+        
+        allInversos(129);
     }
     
     public static void testuEuclides(int a, int b) {
@@ -67,5 +73,27 @@ public class TestTeoNum {
         r = RTNum.modExceso((a*(-1)), m*(-1));
         System.out.println(r);
         
+    }
+    
+    /**
+     * Testea todos los inversos que se encuentren en 
+     * Zm e imprimelos de la forma (a,a^-1) donde el segundo elemento
+     * es el inverso multiplicativo del primero y lleva una cuenta de 
+     * cuantos fueron
+     * @param m Modulo de Zm, nota el 0 ni cagando tiene inverso
+     * y el 1 ya es inverso de si mismi en cualquier m
+     */
+    public static void allInversos(int m){ 
+        int k = 1;//empieza en listado natural
+        for (int i = 0; i < m; i++) {
+            try{
+            int a = RTNum.inversoMultiplicativoMod(i,m);
+                System.out.println((k++) + ": ("+i+","+a+")\\\\");//pa latex
+            } catch (Exception e){
+                continue;//Mira primera vez que tiene sentido usar el me la
+                //suda en programacion, y aun asi es redundante
+            }
+        }
+        System.out.println("Total de inversos: " + (k-1));//la numeracion se ajusta
     }
 }

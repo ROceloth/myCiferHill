@@ -20,12 +20,13 @@ import Matrices.Matriz;
 public class CifradoHill {
     
     //Alfabeto con ñ -> mod 27 pues
-    public static final String  ALFABETO 
-            = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    //public static final String  ALFABETO 
+           // = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
     //Estrategia de comportamiento?
-    /*
+    
+     //Solo pruevas
     public static final String  ALFABETO 
-            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";*/
+            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
     public static final int N = ALFABETO.length();
     //Areglo por char -> letras
@@ -89,7 +90,7 @@ public class CifradoHill {
      * @return true solamente si u_Clave.length() tiene raiz cuadrada
      * exacta n y u_Msg.lenght() es multiplo de n
      */
-    public boolean isLenghtMatch(String u_Clave, String u_Msg){
+    private boolean isLenghtMatch(String u_Clave, String u_Msg){
         if (u_Clave.length() == 0 || u_Msg.length() == 0) {
             return false;
         }
@@ -106,7 +107,7 @@ public class CifradoHill {
      * @param str String a compactar y volver mayusculas
      * @return 
      */
-    public String toUpperCompact(String str){
+    private String toUpperCompact(String str){
         //Con java 11 esto lo hace trim()
         String str1 = str.replaceAll("\\s+","");
         String str2 = str1.toUpperCase();
@@ -158,7 +159,7 @@ public class CifradoHill {
 
             }
         }
-
+        
         return A;
     }
     
@@ -347,7 +348,7 @@ public class CifradoHill {
         
         //Busqueda de la matriz inversa modulo N
         double detA = A.determinate();
-        Matriz A1 = A.inversa();
+        Matriz A1 = A.inversa(); //Si ni siquiera tiene inversa el metodo lo avisa
         
         /* Se cumple que
         A^-1 = 1/detA(adj(A^t))
@@ -358,15 +359,21 @@ public class CifradoHill {
         definir si todo esto es posible)
         */
         int detAaux = (int) Math.round(detA);
-        int r = ToolsTeoNum.RTNum.modExceso(detAaux, N);
+        int r = ToolsTeoNum.RTNum.modExceso(detAaux, N); 
         int r1 = ToolsTeoNum.RTNum.inversoMultiplicativoMod(r, N);
+        
+        /*
+        Si inversoMultiplicativoMod indica que no tiene el lo avisa
+        Por lo tanto la matriz no tiene inverso en el modulo N
+        aunque si tenga inversa normal la matriz
+        */
         
         Matriz A3 = A1.productoEscalarMatriz(detA*r1); //De un solo golpe
         A3.reduccionModulo(N); //Matriz inversa modulo N
         
         //Empieza el decifrado
         
-        //Misma secuencia, diferentes paramentros
+        //Misma secuencia, diferentes paramentros, sobrecarga de metodo
         Matriz [] Mi = encriptaMHill(A3,Ci);//reutilizacion de codigo pawa
         
         String msg = recuperaInfMatriz(Mi);
