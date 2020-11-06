@@ -10,8 +10,19 @@ import java.util.Scanner;
  * de textos en archivos
  * 
  * Los archivos estan enciptados con la tecnica de Hill
- * por cada palabra se su traduccion/desifrado en un archivo
+ * por cada palabra su traduccion/desifrado en un archivo
  * de salida de acuerdo a la estructura del archivo de entrada.
+ * 
+ * La tecnica se trata de separar las palabras y decifrarlas segun
+ * la clave optenida por alguna tecnica del criptoAnal-isis de Hill
+ * sea un ataque al sistema de hill conociendo una parte de la traduccion
+ * y con ella deducir las relaciones de las congruencias implicitas en el
+ * cifrado (como fue el caso de la tarea) o tener la iluminacion divina y 
+ * magicamente atinarle a la clave (que el brujo que domine esa tecnica puede
+ * romper cualquier criptosistema).
+ * 
+ * Esta clase fue un auxiliar para hacer el desifrado de un ejercicio de la
+ * tarea. Usada en los paquetes de testModulos.
  * 
  * Clase usada en las pruevas de los modulos y para la tarea
  * @author William Oceloth Zalfivar Rico a.k.a ROceloth el mas perron de los

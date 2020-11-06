@@ -20,13 +20,13 @@ import Matrices.Matriz;
 public class CifradoHill {
     
     //Alfabeto con ñ -> mod 27 pues
-    //public static final String  ALFABETO 
-           // = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-    //Estrategia de comportamiento?
+    public static final String  ALFABETO 
+            = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    //Estrategia de comportamiento?, quiza en una nueva version
     
      //Solo pruevas
-    public static final String  ALFABETO 
-            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    //public static final String  ALFABETO 
+            //= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
     public static final int N = ALFABETO.length();
     //Areglo por char -> letras
@@ -54,28 +54,37 @@ public class CifradoHill {
      * validas para el cifrado de Hill
      */
     
-    public String encriptar(String clave, String msg) throws Exception{
+    public String encriptar(String clave, String msg) throws Exception {
         //wacha que ninguna length sea 0
         String u_Clave = toUpperCompact(clave);
         String u_Msg = toUpperCompact(msg);
-        
-        if (!isLenghtMatch(u_Clave,u_Msg)) {
-            throw new Exception ("Longuitudes de valores invalidos");
+
+        if (!isLenghtMatch(u_Clave, u_Msg)) {
+            throw new Exception("Longuitudes de valores invalidos");
         }
-        
+
         //raiz exacta
         double n1 = Math.sqrt(u_Clave.length());
-        int n = (int)Math.round(n1); //solo hacer 1 casteo
+        int n = (int) Math.round(n1); //solo hacer 1 casteo
         //Respiracion de CC, 8° posutura myEstiloTemplate
-        
-        Matriz A = toMatrizClave(u_Clave,n);
-        
-        Matriz [] Pi = toMatricesData(u_Msg,n); //nombre mas descriptivo
-        
-        Matriz [] Si = encriptaMHill(A,Pi);
-        
+
+        Matriz A = toMatrizClave(u_Clave, n);
+
+        /*
+        Puede ser el caso de que se pueda encriptar con la clave
+        pero no desencriptar con por que la clave porque no tiene una
+        representacion en matriz con inversa en modulo N
+         */
+        if (!isHillKriptable(A)) {
+            throw new Exception("La clave no es apta para cifrar");
+        }
+
+        Matriz[] Pi = toMatricesData(u_Msg, n); //nombre mas descriptivo
+
+        Matriz[] Si = encriptaMHill(A, Pi);
+
         String s = recuperaInfMatriz(Si);
-        
+
         return s;
     }
     
@@ -222,13 +231,9 @@ public class CifradoHill {
      * @param P Matriz para cifrar
      * @return Una matriz encriptada, un n-grama cifrado, i.e S = A x P
      * multiplicacion de matrices
-     * @throws Exception la matriz A no tiene inversa modulo N, no se deberia
-     * de encriptar con esta matriz
+     * @throws Exception la matriz no se puede multiplicar o el N es 0
      */
     private Matriz encriptaMHill(Matriz A, Matriz P) throws Exception{
-        if (!isHillKriptable(A)) {
-            throw new Exception("La clave no es apta para cifrar");
-        }
         
         Matriz S = A.productoM(P);//producto
         S.reduccionModulo(N);
@@ -344,6 +349,11 @@ public class CifradoHill {
         
         //Valores a matrices
         Matriz A = toMatrizClave(u_Clave,n);
+        
+        if (!isHillKriptable(A)) {
+            throw new Exception("La clave no es apta para cifrar");
+        }//La representacion de la clave no tiene inversa modulo N
+        
         Matriz [] Ci = toMatricesData(u_crip,n);//Datagramas Matriz en arreglo
         
         //Busqueda de la matriz inversa modulo N
